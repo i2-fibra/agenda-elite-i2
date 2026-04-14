@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i2 Fibra — Painel de Eventos Elite 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--g:#0A9B84;--gd:#0B7060;--gdp:#085a4f;--y:#F3C300;--tm:#67D1BA;--tl:#A4D2C9;--w:#fff;--r:#e05252;--or:#f0a040;--pu:#9c88e0;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Montserrat',sans-serif;background:var(--g);color:var(--w);min-height:100vh;}
+
+  header{background:var(--gdp);border-bottom:2px solid var(--y);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .lm{width:40px;height:40px;background:var(--y);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;font-weight:800;color:var(--gdp);letter-spacing:-1px;}
+  .la{display:flex;align-items:center;gap:12px;}
+  .brand{font-size:1.05rem;font-weight:800;color:var(--y);letter-spacing:1px;}
+  .sub{font-size:0.64rem;color:var(--tl);text-transform:uppercase;letter-spacing:2px;}
+  .hr{font-size:0.68rem;color:var(--tl);text-align:right;line-height:1.7;}
+  .hr span{color:var(--y);font-weight:700;}
+
+  .ibar{background:var(--gd);border-bottom:1px solid rgba(243,195,0,.22);padding:10px 26px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .ilbl{font-size:0.61rem;font-weight:800;color:var(--y);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px;}
+  .iemp{font-size:0.71rem;color:var(--w);font-weight:600;}
+  .iemp span{color:var(--tl);font-weight:400;font-size:0.62rem;}
+  .ipassos{display:flex;gap:14px;flex-wrap:wrap;margin-top:5px;}
+  .ip{font-size:0.62rem;color:var(--tl);}
+  .ip strong{color:var(--w);display:block;font-size:0.66rem;}
+  .ilink{background:var(--y);color:var(--gdp);font-family:'Montserrat',sans-serif;font-size:0.71rem;font-weight:800;padding:8px 15px;border-radius:4px;text-decoration:none;letter-spacing:.5px;white-space:nowrap;}
+  .ilink:hover{opacity:.85;}
+
+  .tabs{background:var(--gd);display:flex;border-bottom:2px solid var(--y);padding:0 22px;overflow-x:auto;}
+  .tab{padding:12px 15px;cursor:pointer;font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tl);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+  .tab:hover{color:var(--w);}
+  .tab.active{color:var(--y);border-bottom-color:var(--y);}
+  .tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .do{background:var(--tm);}.dp{background:var(--y);}.dc{background:var(--r);}.dpe{background:var(--tl);}
+
+  .panel{display:none;padding:18px 22px 48px;}
+  .panel.active{display:block;}
+
+  .fbar{display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap;align-items:center;}
+  .fbar input,.fbar select{background:var(--gd);border:1px solid var(--tm);color:var(--w);padding:8px 11px;border-radius:4px;font-family:'Montserrat',sans-serif;font-size:0.74rem;outline:none;}
+  .fbar input{flex:1;min-width:180px;}
+  .fbar input::placeholder{color:var(--tl);}
+  .fbar input:focus,.fbar select:focus{border-color:var(--y);}
+
+  .mblock{margin-bottom:22px;}
+  .mlbl{font-size:0.64rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--y);padding-bottom:5px;margin-bottom:9px;border-bottom:1px solid rgba(243,195,0,.16);}
+
+  .ecard{background:var(--gd);border:1px solid rgba(103,209,186,.1);border-left:4px solid var(--tm);border-radius:5px;padding:10px 13px;margin-bottom:6px;display:grid;grid-template-columns:48px 1fr auto;gap:11px;align-items:center;cursor:pointer;transition:all .15s;}
+  .ecard:hover{background:#0d8570;transform:translateX(2px);}
+  .ecard.presencial{border-left-color:var(--y);}
+  .ecard.hotseat{border-left-color:var(--pu);}
+  .ecard.treinamento{border-left-color:var(--tm);}
+  .ecard.conexao{border-left-color:var(--tl);}
+  .ecard.gravacao{border-left-color:var(--or);}
+  .ecard.conflito{box-shadow:0 0 0 1px rgba(224,82,82,.35);}
+
+  .eday{font-size:1.3rem;font-weight:800;color:var(--y);line-height:1;text-align:center;}
+  .edow{font-size:0.57rem;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:1px;text-align:center;}
+  .etitle{font-size:0.8rem;font-weight:700;color:var(--w);margin-bottom:2px;}
+  .esub{font-size:0.66rem;color:var(--tl);margin-bottom:4px;}
+  .etags{display:flex;gap:4px;flex-wrap:wrap;}
+  .tag{font-size:0.57rem;font-weight:700;padding:2px 6px;border-radius:2px;text-transform:uppercase;letter-spacing:.4px;}
+  .to{background:rgba(103,209,186,.1);color:var(--tm);border:1px solid rgba(103,209,186,.2);}
+  .tp{background:rgba(243,195,0,.1);color:var(--y);border:1px solid rgba(243,195,0,.2);}
+  .ts{background:rgba(164,210,201,.1);color:var(--tl);border:1px solid rgba(164,210,201,.2);}
+  .tn{background:rgba(255,255,255,.05);color:var(--w);border:1px solid rgba(255,255,255,.1);}
+  .tc{background:rgba(224,82,82,.1);color:#ff9999;border:1px solid rgba(224,82,82,.2);}
+  .tg{background:rgba(240,160,64,.1);color:var(--or);border:1px solid rgba(240,160,64,.2);}
+  .tm2{background:rgba(156,136,224,.1);color:var(--pu);border:1px solid rgba(156,136,224,.2);}
+  .ehour{font-size:0.66rem;font-weight:700;color:var(--y);white-space:nowrap;text-align:right;}
+  .epax{font-size:0.59rem;color:var(--tl);margin-top:2px;text-align:right;}
+
+  /* PESSOA CARD */
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+  .pcard{background:var(--gd);border:1px solid rgba(103,209,186,.13);border-radius:5px;padding:0;overflow:hidden;}
+  .phead{display:flex;align-items:center;gap:10px;padding:12px 13px 10px;border-bottom:1px solid rgba(255,255,255,.06);}
+  .pav{width:33px;height:33px;border-radius:50%;background:var(--y);color:var(--gdp);font-weight:800;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .pname{font-size:0.84rem;font-weight:700;color:var(--y);}
+  .prole{font-size:0.62rem;color:var(--tl);}
+  .pcursos{padding:8px 13px 10px;}
+
+  /* Grupo de curso dentro do card de pessoa */
+  .curso-grupo{margin-bottom:9px;}
+  .curso-grupo:last-child{margin-bottom:0;}
+  .curso-header{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+  .curso-nome{font-size:0.68rem;font-weight:800;color:var(--tl);text-transform:uppercase;letter-spacing:.8px;}
+  .curso-badge{font-size:0.55rem;font-weight:700;padding:1px 5px;border-radius:2px;}
+  .cb-p{background:rgba(243,195,0,.1);color:var(--y);border:1px solid rgba(243,195,0,.2);}
+  .cb-o{background:rgba(103,209,186,.1);color:var(--tm);border:1px solid rgba(103,209,186,.2);}
+  .aula-row{display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-radius:3px;margin-bottom:2px;font-size:0.68rem;}
+  .aula-row:hover{background:rgba(255,255,255,.04);}
+  .aula-data{color:var(--y);font-weight:700;min-width:70px;font-size:0.66rem;}
+  .aula-nome{color:var(--tl);}
+  .aula-p{color:var(--y);}
+  .aula-g{color:var(--or);}
+  .pcnt{font-size:0.61rem;color:var(--tm);font-weight:700;padding:6px 13px 10px;border-top:1px solid rgba(255,255,255,.05);}
+  .pnota{font-size:0.61rem;color:var(--or);padding:5px 13px 8px;background:rgba(240,160,64,.06);border-top:1px solid rgba(240,160,64,.1);}
+
+  /* CONFLITOS */
+  .csummary{background:rgba(224,82,82,.08);border:1px solid rgba(224,82,82,.22);border-radius:5px;padding:11px 15px;margin-bottom:16px;font-size:0.72rem;color:#ffaaaa;}
+  .ccard{background:var(--gd);border:1px solid rgba(224,82,82,.22);border-left:4px solid var(--r);border-radius:5px;padding:12px 15px;margin-bottom:9px;}
+  .cdate{font-size:0.79rem;font-weight:800;color:var(--r);margin-bottom:6px;}
+  .citem{font-size:0.72rem;color:var(--w);padding:2px 0;display:flex;align-items:flex-start;gap:5px;}
+  .citem::before{content:'▸';color:var(--r);flex-shrink:0;}
+  .coverlap{font-size:0.65rem;color:var(--tl);margin-top:6px;}
+  .coverlap strong{color:var(--y);}
+  .cnote{font-size:0.63rem;color:var(--or);margin-top:4px;font-style:italic;}
+
+  /* STATS */
+  .srow{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:9px;margin-bottom:18px;}
+  .sbox{background:var(--gd);border:1px solid rgba(103,209,186,.13);border-radius:5px;padding:13px;text-align:center;}
+  .snum{font-size:1.75rem;font-weight:800;color:var(--y);}
+  .slbl{font-size:0.59rem;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+
+  /* MODAL */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(4,28,24,.88);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+  .overlay.open{display:flex;}
+  .modal{background:var(--gd);border:1px solid var(--y);border-radius:8px;max-width:470px;width:93%;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+  .mhdr{background:var(--gdp);padding:15px 19px;border-bottom:2px solid var(--y);border-radius:8px 8px 0 0;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+  .mtitle{font-size:0.9rem;font-weight:800;color:var(--y);line-height:1.3;}
+  .mtipo{font-size:0.61rem;color:var(--tl);margin-top:3px;}
+  .mclose{background:none;border:none;color:var(--tl);font-size:1.1rem;cursor:pointer;padding:0 2px;flex-shrink:0;}
+  .mclose:hover{color:var(--y);}
+  .mbody{padding:16px 19px;}
+  .mrow{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:0.73rem;gap:12px;}
+  .mrow:last-child{border-bottom:none;}
+  .ml{color:var(--tl);font-weight:600;min-width:108px;font-size:0.67rem;}
+  .mv{color:var(--w);text-align:right;flex:1;}
+  .mv.yl{color:var(--y);font-weight:700;}
+  .mv.or{color:var(--or);}
+  .minsc{margin:0 19px 14px;background:var(--gdp);border:1px solid rgba(243,195,0,.22);border-radius:5px;padding:11px 13px;}
+  .minsc .mit{font-size:0.62rem;font-weight:800;color:var(--y);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;}
+  .minsc .mir{font-size:0.68rem;color:var(--tl);margin-bottom:3px;}
+  .minsc .mir strong{color:var(--w);}
+  .minsc a{display:block;margin-top:9px;background:var(--y);color:var(--gdp);text-align:center;padding:9px;border-radius:4px;font-weight:800;font-size:0.72rem;text-decoration:none;}
+  .minsc a:hover{opacity:.85;}
+  .mact{padding:11px 19px 15px;}
+  .mbtn{width:100%;background:var(--gdp);border:1px solid rgba(103,209,186,.22);color:var(--tl);padding:9px;border-radius:4px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+  .mbtn:hover{border-color:var(--y);color:var(--y);}
+  .empty{text-align:center;color:var(--tl);padding:38px;font-size:0.78rem;}
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-track{background:var(--gdp);}
+  ::-webkit-scrollbar-thumb{background:var(--tm);border-radius:4px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="la">
+    <div class="lm">i2</div>
+    <div><div class="brand">i2 FIBRA</div><div class="sub">Painel de Eventos Elite 2026</div></div>
+  </div>
+  <div class="hr">Atualizado em <span id="today"></span><br>Eventos a partir de <span>01/04/2026</span></div>
+</header>
+
+<div class="ibar">
+  <div>
+    <div class="ilbl">Dados para Inscrição</div>
+    <div class="iemp">I2 TELECOM TECNOLOGIA DA INFORMACAO LTDA <span>— Razão Social</span></div>
+    <div class="ipassos">
+      <div class="ip"><strong>1º passo</strong>Acessar o calendário</div>
+      <div class="ip"><strong>2º passo</strong>Localizar o evento</div>
+      <div class="ip"><strong>3º passo</strong>Clicar em INSCREVA-SE</div>
+      <div class="ip"><strong>Responsável</strong>Gabriel (inscreve todos)</div>
+    </div>
+  </div>
+  <a class="ilink" href="https://bit.ly/calendario-elite-evo-gestao" target="_blank">▶ CALENDÁRIO SEJA AP</a>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="st('online')"><span class="tdot do"></span>Online</div>
+  <div class="tab" onclick="st('presencial')"><span class="tdot dp"></span>Presencial</div>
+  <div class="tab" onclick="st('conflitos')"><span class="tdot dc"></span>Conflitos <span id="ctag" style="background:var(--r);color:#fff;font-size:0.56rem;padding:1px 6px;border-radius:10px;margin-left:3px;font-weight:800"></span></div>
+  <div class="tab" onclick="st('pessoas')"><span class="tdot dpe"></span>Por Pessoa</div>
+  <div class="tab" onclick="st('eliteens')"><span class="tdot" style="background:#a78bfa"></span>Eliteens</div>
+</div>
+
+<div id="tab-online" class="panel active">
+  <div class="fbar">
+    <input type="text" id="so" placeholder="Buscar evento ou participante..." oninput="ro()">
+    <select id="ft" onchange="ro()">
+      <option value="">Todos os tipos</option>
+      <option value="GAP AVANÇADO">GAP Avançado</option>
+      <option value="GAP">GAP</option>
+      <option value="FINANÇAS">Finanças</option>
+      <option value="RH">RH</option>
+      <option value="MARKETING">Marketing</option>
+      <option value="COMERCIAL">Comercial</option>
+      <option value="IA">Gestão com IA</option>
+      <option value="HOT SEAT">Hot Seat</option>
+      <option value="TREINAMENTO">Treinamento</option>
+      <option value="CONEXÃO">Conexão</option>
+    </select>
+  </div>
+  <div id="oc"></div>
+</div>
+
+<div id="tab-presencial" class="panel">
+  <div class="fbar"><input type="text" id="sp" placeholder="Buscar evento ou local..." oninput="rp()"></div>
+  <div id="pc"></div>
+</div>
+
+<div id="tab-conflitos" class="panel"><div id="cc"></div></div>
+
+<div id="tab-pessoas" class="panel">  <div class="fbar"><input type="text" id="spe" placeholder="Nome da pessoa..." oninput="rpe()"></div>
+  <div class="srow" id="sr"></div>
+  <div id="pec" class="pgrid"></div>
+</div>
+
+<!-- ELITEENS -->
+<div id="tab-eliteens" class="panel">
+  <div style="background:var(--gdp);border:1px solid rgba(167,139,250,.3);border-radius:6px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div style="font-size:0.62rem;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Eliteens — O Futuro do Brasil</div>
+      <div style="font-size:0.78rem;color:var(--w);font-weight:600;margin-bottom:4px;">Programa de desenvolvimento para jovens filhos de colaboradores</div>
+      <div style="font-size:0.68rem;color:var(--tl);line-height:1.6;">Encontros online semanais — <strong style="color:var(--w)">das 19h às 20h30</strong> — 100% online<br>
+      Inscrição feita pelo <strong style="color:var(--y)">RH (Laysla)</strong> · 2 vagas por empresa · Aberto a filhos de qualquer colaborador interessado</div>
+    </div>
+    <a href="https://bit.ly/calendario-elite-evo-gestao" target="_blank" style="background:#a78bfa;color:#1a0a4a;font-family:'Montserrat',sans-serif;font-size:0.7rem;font-weight:800;padding:8px 15px;border-radius:4px;text-decoration:none;white-space:nowrap;">▶ CALENDÁRIO SEJA AP</a>
+  </div>
+
+  <!-- Como funciona -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:22px;">
+    <div style="background:var(--gd);border:1px solid rgba(167,139,250,.2);border-radius:5px;padding:13px;">
+      <div style="font-size:0.6rem;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">1º passo</div>
+      <div style="font-size:0.74rem;font-weight:700;color:var(--w);">Manifestar interesse</div>
+      <div style="font-size:0.66rem;color:var(--tl);margin-top:3px;">Colaborador informa ao RH que deseja inscrever o filho</div>
+    </div>
+    <div style="background:var(--gd);border:1px solid rgba(167,139,250,.2);border-radius:5px;padding:13px;">
+      <div style="font-size:0.6rem;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">2º passo</div>
+      <div style="font-size:0.74rem;font-weight:700;color:var(--w);">Autorização RH</div>
+      <div style="font-size:0.66rem;color:var(--tl);margin-top:3px;">Laysla valida e faz a inscrição no calendário da Seja AP</div>
+    </div>
+    <div style="background:var(--gd);border:1px solid rgba(167,139,250,.2);border-radius:5px;padding:13px;">
+      <div style="font-size:0.6rem;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">3º passo</div>
+      <div style="font-size:0.74rem;font-weight:700;color:var(--w);">Dia do evento</div>
+      <div style="font-size:0.66rem;color:var(--tl);margin-top:3px;">Filho acompanha o evento aqui na empresa — das 19h às 20h30</div>
+    </div>
+    <div style="background:var(--gd);border:1px solid rgba(167,139,250,.2);border-radius:5px;padding:13px;">
+      <div style="font-size:0.6rem;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;">Empresa</div>
+      <div style="font-size:0.74rem;font-weight:700;color:var(--y);">I2 TELECOM</div>
+      <div style="font-size:0.66rem;color:var(--tl);margin-top:3px;">I2 TELECOM TECNOLOGIA DA INFORMACAO LTDA</div>
+    </div>
+  </div>
+
+  <!-- Calendário de eventos -->
+  <div style="font-size:0.64rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#a78bfa;padding-bottom:5px;margin-bottom:12px;border-bottom:1px solid rgba(167,139,250,.18);">Calendário de Encontros Online 2026</div>
+  <div id="eliteens-content"></div>
+</div>
+
+<div class="overlay" id="ov" onclick="mc(event)">
+  <div class="modal">
+    <div class="mhdr"><div><div class="mtitle" id="mt"></div><div class="mtipo" id="mtp"></div></div><button class="mclose" onclick="cm()">✕</button></div>
+    <div class="mbody" id="mb"></div>
+    <div class="minsc" id="mi"></div>
+    <div class="mact"><button class="mbtn" onclick="cm()">Fechar</button></div>
+  </div>
+</div>
+
+<script>
+const DW=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const MN=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const LINK='https://bit.ly/calendario-elite-evo-gestao';
+const EMP='I2 TELECOM TECNOLOGIA DA INFORMACAO LTDA';
+
+// ════════════════════════════════════════════════════════
+// EVENTOS ONLINE — a partir de 01/04/2026
+// Ajustes aplicados nesta versão:
+// • Gabriel e Cleire: REMOVIDOS do GAP T1 → GAP T2 (jul/ago)
+// • Francieli: REMOVIDA do GAP T1 → já estava no GAP T2 ✓
+// • GAP T1 agora: Weslley, Rafael, Vitor Martins, Gustavo, Rubens, Pedro, Josias, Laysla
+// • GAP T2: Patrick, Maria, Hugo, Janderson, Vitoria, Erika, Victor Hugo, Francieli,
+//           Gabriel, Cleire, Leonilda, Andressa
+// • GAP Avançado T2: todos acima + Rafael, Vitor Martins, Gustavo, Rubens, Pedro, Josias, Laysla
+// ════════════════════════════════════════════════════════
+const EO=[
+  // ── ABRIL ──
+  {d:'2026-04-06',t:'CONEXÃO',ds:'Conexão — Início de Mês',h:'07:00 às 08:30',px:'Toda Equipe',sl:'Sala de Treinamento'},
+  {d:'2026-04-08',t:'GESTÃO DE RH',ds:'Gestão de RH T1 — Aula 1',h:'09:00 às 12:00',px:'Gabriel, Cleire, Laysla, Weslley, Josias',sl:'Sala de Reunião'},
+  {d:'2026-04-13',t:'GAP',ds:'GAP T1 — Aula 1',h:'09:00 às 12:00',px:'Weslley, Rafael, Vitor Martins, Gustavo, Rubens, Pedro, Josias, Laysla',sl:'Sala de Treinamento'},
+  {d:'2026-04-13',t:'GESTÃO COMERCIAL',ds:'Gestão Comercial T1 — Aula 1',h:'09:00 às 12:00',px:'Gabriel, Cleire, Victor Hugo, Francieli',sl:'Sala de Reunião'},
+  {d:'2026-04-14',t:'HOT SEAT',ds:'Hot Seat — Encontro Mensal Donos',h:'09:00 às 12:00',px:'Gabriel e Cleire',sl:'Diretoria'},
+  {d:'2026-04-15',t:'GESTÃO DE RH',ds:'Gestão de RH T1 — Aula 2',h:'09:00 às 12:00',px:'Gabriel, Cleire, Laysla, Weslley, Josias',sl:'Sala de Reunião'},
+  {d:'2026-04-20',t:'TREINAMENTO',ds:'Treinamento de Vendas',h:'08:00 às 10:00',px:'Toda Equipe Comercial',sl:'Sala de Treinamento'},
+  {d:'2026-04-22',t:'GESTÃO DE RH',ds:'Gestão de RH T1 — Aula 3',h:'09:00 às 12:00',px:'Gabriel, Cleire, Laysla, Weslley, Josias',sl:'Sala de Reunião'},
+  {d:'2026-04-27',t:'GAP',ds:'GAP T1 — Aula 2',h:'09:00 às 12:00',px:'Weslley, Rafael, Vitor Martins, Gustavo, Rubens, Pedro, Josias, Laysla',sl:'Sala de Treinamento'},
+  {d:'2026-04-27',t:'GESTÃO COMERCIAL',ds:'Gestão Comercial T1 — Aula 2',h:'09:00 às 12:00',px:'Gabriel, Cleire, Victor Hugo, Francieli',sl:'Sala de Reunião'},
+  {d:'2026-04-29',t:'GESTÃO DE RH',ds:'Gestão de RH T1 — Aula 4',h:'09:00 às 12:00',px:'Gabriel, Cleire, Laysla, Weslley, Josias',sl:'Sala de Reunião'},
+  // ── MAIO ──
+  {d:'2026-05-04',t:'CONEXÃO',ds:'Conexão — Início de Mês',h:'07:00 às 08:30',px:'Toda Equipe',sl:'Sala de Treinamento'},
+  {d:'2026-05-05',t:'GESTÃO DE MARKETING',ds:'Gestão de Marketing T1 — Aula 1',h:'09:00 às 12:00',px:'Gabriel, Cleire, Josias, Weslley, Victor Hugo, Francieli',sl:'Sala de Reunião'},
+  {d:'2026-05-11',t:'GAP',ds:'GAP T1 — Aula 3',h:'09:00 às 12:00',px:'Weslley, Rafael, Vitor Martins, Gustavo, Rubens, Pedro, Josias, Laysla',sl:'Sala de Treinamento'},
+  {d:'2026-05-11',t:'GESTÃO COMERCIAL',ds:'Gestão Comercial T1 — Aula 3',h:'09:00 às 12:00',px:'Gabriel, Cleire, Victor Hugo, Francieli',sl:'Sala de Reunião'},
+  {d:'2026-05-12',t:'GESTÃO DE MARKETING',ds:'Gestão de Marketing T1 — Aula 2',h:'09:00 às 12:00',px:'Gabriel, Cleire, Josias, Weslley, Victor Hugo, Francieli',sl:'Sala de Reunião'},
+  {d:'2026-05-14',t:'HOT SEAT',ds:'Hot Seat — Encontro Mensal Donos',h:'09:00 às 12:00',px:'Gabriel e Cleire',sl:'Diretoria'},
+  {d:'2026-05-18',t:'TREINAMENTO',ds:'Treinamento de Vendas',h:'08:00 às 10:00',px:'Toda Equipe Comercial',sl:'Sala de Treinamento'},
+  {d:'2026-05-19',t:'GESTÃO DE MARKETING',ds:'Gestão de Marketing T1 — Aula 3',h:'09:00 às 12:00',px:'Gabriel, Cleire, Josias, Weslley, Victor Hugo, Francieli',sl:'Sala de Reunião'},
+  {d:'2026-05-25',t:'GAP',ds:'GAP T1 — Aula 4',h:'09:00 às 12:00',px:'Weslley, Rafael, Vitor Martins, Gustavo, Rubens, Pedro, Josias, Laysla',sl:'Sala de Treinamento'},
+  {d:'2026-05-25',t:'GESTÃO COMERCIAL',ds:'Gestão Comercial T1 — Aula 4',h:'09:00 às 12:00',px:'Gabriel, Cleire, Victor Hugo, Francieli',sl:'Sala de Reunião'},
+  {d:'2026-05-26',t:'GESTÃO DE MARKETING',ds:'Gestão de Marketing T1 — Aula 4',h:'09:00 às 12:00',px:'Gabriel, Cleire, Josias, Weslley, Victor Hugo, Francieli',sl:'Sala de Reunião'},
+  // ── JUNHO ──
+  {d:'2026-06-01',t:'CONEXÃO',ds:'Conexão — Início de Mês',h:'07:00 às 08:30',px:'Toda Equipe',sl:'Sala de Treinamento'},
+  {d:'2026-06-02',t:'GESTÃO COM IA',ds:'Gestão com IA T1 — Aula 1',h:'09:00 às 12:00',px:'Gabriel, Cleire, Weslley, Rafael, Gustavo, Pedro, Patrick, Vitor Martins, Josias, Laysla, Victor Hugo, Francieli',sl:'Sala de Treinamento'},
+  {d:'2026-06-08',t:'HOT SEAT',ds:'Hot Seat — Encontro Mensal Donos',h:'09:00 às 12:00',px:'Gabriel e Cleire',sl:'Diretoria'},
+  {d:'2026-06-09',t:'GESTÃO COM IA',ds:'Gestão com IA T1 — Aula 2',h:'09:00 às 12:00',px:'Gabriel, Cleire, Weslley, Rafael, Gustavo, Pedro, Patrick, Vitor Martins, Josias, Laysla, Victor Hugo, Francieli',sl:'Sala de Treinamento'},
+  {d:'2026-06-15',t:'TREINAMENTO',ds:'Treinamento de Vendas',h:'08:00 às 10:00',px:'Toda Equipe Comercial',sl:'Sala de Treinamento'},
+  {d:'2026-06-16',t:'GESTÃO COM IA',ds:'Gestão com IA T1 — Aula 3',h:'09:00 às 12:00',px:'Gabriel, Cleire, Weslley, Rafael, Gustavo, Pedro, Patrick, Vitor Martins, Josias, Laysla, Victor Hugo, Francieli',sl:'Sala de Treinamento'},
+  {d:'2026-06-23',t:'GESTÃO COM IA',ds:'Gestão com IA T1 — Aula 4',h:'09:00 às 12:00',px:'Gabriel, Cleire, Weslley, Rafael, Gustavo, Pedro, Patrick, Vitor Martins, Josias, Laysla, Victor Hugo, Francieli',sl:'Sala de Treinamento'},
+  // ── JULHO ──
+  {d:'2026-07-06',t:'CONEXÃO',ds:'Conexão — Início de Mês',h:'07:00 às 08:30',px:'Toda Equipe',sl:'Sala de Treinamento'},
+  {d:'2026-07-07',t:'FINANÇAS',ds:'Gestão de Finanças T2 — Aula 1',h:'09:00 às 12:00',px:'Gabriel, Cleire, Claudia, Leonilda, Weslley, Josias',sl:'Sala de Reunião',mv:true},
+  {d:'2026-07-13',t:'HOT SEAT',ds:'Hot Seat — Encontro Mensal Donos',h:'09:00 às 12:00',px:'Gabriel e Cleire',sl:'Diretoria'},
+  {d:'2026-07-14',t:'FINANÇAS',ds:'Gestão de Finanças T2 — Aula 2',h:'09:00 às 12:00',px:'Gabriel, Cleire, Claudia, Leonilda, Weslley, Josias',sl:'Sala de Reunião'},
+  {d:'2026-07-20',t:'TREINAMENTO',ds:'Treinamento de Vendas',h:'08:00 às 10:00',px:'Toda Equipe Comercial',sl:'Sala de Treinamento'},
+  {d:'2026-07-21',t:'FINANÇAS',ds:'Gestão de Finanças T2 — Aula 3',h:'09:00 às 12:00',px:'Gabriel, Cleire, Claudia, Leonilda, Weslley, Josias',sl:'Sala de Reunião'},
+  {d:'2026-07-21',t:'GAP',ds:'GAP T2 — Aula 1',h:'09:00 às 12:00',px:'Gabriel, Cleire, Patrick, Maria, Hugo, Janderson, Vitoria, Erika, Victor Hugo, Francieli, Leonilda, Andressa',sl:'Sala de Treinamento'},
+  {d:'2026-07-27',t:'GAP',ds:'GAP T2 — Aula 2',h:'09:00 às 12:00',px:'Gabriel, Cleire, Patrick, Maria, Hugo, Janderson, Vitoria, Erika, Victor Hugo, Francieli, Leonilda, Andressa',sl:'Sala de Treinamento'},
+  {d:'2026-07-28',t:'FINANÇAS',ds:'Gestão de Finanças T2 — Aula 4',h:'09:00 às 12:00',px:'Gabriel, Cleire, Claudia, Leonilda, Weslley, Josias',sl:'Sala de Reunião'},
+  // ── AGOSTO ──
+  {d:'2026-08-03',t:'CONEXÃO',ds:'Conexão — Início de Mês',h:'07:00 às 08:30',px:'Toda Equipe',sl:'Sala de Treinamento'},
+  {d:'2026-08-04',t:'GAP',ds:'GAP T2 — Aula 3',h:'09:00 às 12:00',px:'Gabriel, Cleire, Patrick, Maria, Hugo, Janderson, Vitoria, Erika, Victor Hugo, Francieli, Leonilda, Andressa',sl:'Sala de Treinamento'},
+  {d:'2026-08-04',t:'GESTÃO DE MARKETING',ds:'Gestão de Marketing T2 — Aula 1',h:'09:00 às 12:00',px:'A definir',ob:'Participantes não definidos'},
+  {d:'2026-08-10',t:'HOT SEAT',ds:'Hot Seat — Encontro Mensal Donos',h:'09:00 às 12:00',px:'Gabriel e Cleire',sl:'Diretoria'},
+  {d:'2026-08-11',t:'GAP',ds:'GAP T2 — Aula 4',h:'09:00 às 12:00',px:'Gabriel, Cleire, Patrick, Maria, Hugo, Janderson, Vitoria, Erika, Victor Hugo, Francieli, Leonilda, Andressa',sl:'Sala de Treinamento'},
+  {d:'2026-08-11',t:'GESTÃO DE MARKETING',ds:'Gestão de Marketing T2 — Aula 2',h:'09:00 às 12:00',px:'A definir'},
+  {d:'2026-08-17',t:'TREINAMENTO',ds:'Treinamento de Vendas',h:'08:00 às 10:00',px:'Toda Equipe Comercial',sl:'Sala de Treinamento'},
+  {d:'2026-08-18',t:'GESTÃO DE MARKETING',ds:'Gestão de Marketing T2 — Aula 3',h:'09:00 às 12:00',px:'A definir'},
+  {d:'2026-08-19',t:'APN GESTORES',ds:'APN 108 para Gestores — Online',h:'Dia inteiro',px:'A definir',ob:'Participantes a definir'},
+  {d:'2026-08-25',t:'GESTÃO DE MARKETING',ds:'Gestão de Marketing T2 — Aula 4',h:'09:00 às 12:00',px:'A definir'},
+  // ── SETEMBRO ──
+  {d:'2026-09-08',t:'GAP AVANÇADO',ds:'GAP Avançado T2 — Aula 1',h:'09:00 às 12:00',px:'Gabriel, Cleire, Weslley, Rafael, Vitor Martins, Victor Hugo, Gustavo, Rubens, Pedro, Josias, Laysla, Francieli, Patrick, Vitoria, Hugo, Janderson, Maria, Erika, Leonilda, Andressa',sl:'Sala de Treinamento',mv:true},
+  {d:'2026-09-14',t:'CONEXÃO',ds:'Conexão — Início de Mês',h:'07:00 às 08:30',px:'Toda Equipe',sl:'Sala de Treinamento'},
+  {d:'2026-09-15',t:'GAP AVANÇADO',ds:'GAP Avançado T2 — Aula 2',h:'09:00 às 12:00',px:'Gabriel, Cleire, Weslley, Rafael, Vitor Martins, Victor Hugo, Gustavo, Rubens, Pedro, Josias, Laysla, Francieli, Patrick, Vitoria, Hugo, Janderson, Maria, Erika, Leonilda, Andressa',sl:'Sala de Treinamento'},
+  {d:'2026-09-21',t:'TREINAMENTO',ds:'Treinamento de Vendas',h:'08:00 às 10:00',px:'Toda Equipe Comercial',sl:'Sala de Treinamento'},
+  {d:'2026-09-22',t:'GAP AVANÇADO',ds:'GAP Avançado T2 — Aula 3',h:'09:00 às 12:00',px:'Gabriel, Cleire, Weslley, Rafael, Vitor Martins, Victor Hugo, Gustavo, Rubens, Pedro, Josias, Laysla, Francieli, Patrick, Vitoria, Hugo, Janderson, Maria, Erika, Leonilda, Andressa',sl:'Sala de Treinamento'},
+  {d:'2026-09-28',t:'HOT SEAT',ds:'Hot Seat — Encontro Mensal Donos',h:'09:00 às 12:00',px:'Gabriel e Cleire',sl:'Diretoria'},
+  {d:'2026-09-29',t:'GAP AVANÇADO',ds:'GAP Avançado T2 — Aula 4',h:'09:00 às 12:00',px:'Gabriel, Cleire, Weslley, Rafael, Vitor Martins, Victor Hugo, Gustavo, Rubens, Pedro, Josias, Laysla, Francieli, Patrick, Vitoria, Hugo, Janderson, Maria, Erika, Leonilda, Andressa',sl:'Sala de Treinamento'},
+  // ── OUTUBRO ──
+  {d:'2026-10-01',t:'GESTÃO DE RH',ds:'Gestão de RH T2 — Aula 1',h:'09:00 às 12:00',px:'A definir',ob:'Participantes não definidos'},
+  {d:'2026-10-05',t:'CONEXÃO',ds:'Conexão — Início de Mês',h:'07:00 às 08:30',px:'Toda Equipe',sl:'Sala de Treinamento'},
+  {d:'2026-10-06',t:'GAP',ds:'GAP T3 — Aula 1',h:'09:00 às 12:00',px:'Claudia',sl:'Sala de Reunião',nt:'GAP Avançado de Claudia: solicitar turma à Seja AP para 2027'},
+  {d:'2026-10-13',t:'GAP',ds:'GAP T3 — Aula 2',h:'09:00 às 12:00',px:'Claudia',sl:'Sala de Reunião'},
+  {d:'2026-10-15',t:'GESTÃO DE RH',ds:'Gestão de RH T2 — Aula 2',h:'09:00 às 12:00',px:'A definir'},
+  {d:'2026-10-19',t:'TREINAMENTO',ds:'Treinamento de Vendas',h:'08:00 às 10:00',px:'Toda Equipe Comercial',sl:'Sala de Treinamento'},
+  {d:'2026-10-20',t:'GAP',ds:'GAP T3 — Aula 3',h:'09:00 às 12:00',px:'Claudia',sl:'Sala de Reunião'},
+  {d:'2026-10-22',t:'GESTÃO DE RH',ds:'Gestão de RH T2 — Aula 3',h:'09:00 às 12:00',px:'A definir'},
+  {d:'2026-10-26',t:'HOT SEAT',ds:'Hot Seat — Encontro Mensal Donos',h:'09:00 às 12:00',px:'Gabriel e Cleire',sl:'Diretoria'},
+  {d:'2026-10-27',t:'GAP',ds:'GAP T3 — Aula 4',h:'09:00 às 12:00',px:'Claudia',sl:'Sala de Reunião'},
+  {d:'2026-10-29',t:'GESTÃO DE RH',ds:'Gestão de RH T2 — Aula 4',h:'09:00 às 12:00',px:'A definir'},
+  // ── NOVEMBRO ──
+  {d:'2026-11-03',t:'GESTÃO COMERCIAL',ds:'Gestão Comercial T2 — Aula 1',h:'09:00 às 12:00',px:'Josias e Weslley',sl:'Sala de Reunião'},
+  {d:'2026-11-09',t:'CONEXÃO',ds:'Conexão — Início de Mês',h:'07:00 às 08:30',px:'Toda Equipe',sl:'Sala de Treinamento'},
+  {d:'2026-11-09',t:'GESTÃO COM IA',ds:'Gestão com IA T2 — Aula 1',h:'09:00 às 12:00',px:'A definir',ob:'Participantes não definidos'},
+  {d:'2026-11-10',t:'GESTÃO COMERCIAL',ds:'Gestão Comercial T2 — Aula 2',h:'09:00 às 12:00',px:'Josias e Weslley',sl:'Sala de Reunião'},
+  {d:'2026-11-16',t:'TREINAMENTO',ds:'Treinamento de Vendas',h:'08:00 às 10:00',px:'Toda Equipe Comercial',sl:'Sala de Treinamento'},
+  {d:'2026-11-17',t:'GESTÃO COMERCIAL',ds:'Gestão Comercial T2 — Aula 3',h:'09:00 às 12:00',px:'Josias e Weslley',sl:'Sala de Reunião'},
+  {d:'2026-11-23',t:'HOT SEAT',ds:'Hot Seat — Encontro Mensal Donos',h:'09:00 às 12:00',px:'Gabriel e Cleire',sl:'Diretoria'},
+  {d:'2026-11-23',t:'GESTÃO COM IA',ds:'Gestão com IA T2 — Aula 2',h:'09:00 às 12:00',px:'A definir'},
+  {d:'2026-11-24',t:'GESTÃO COMERCIAL',ds:'Gestão Comercial T2 — Aula 4',h:'09:00 às 12:00',px:'Josias e Weslley',sl:'Sala de Reunião'},
+  {d:'2026-11-30',t:'GESTÃO COM IA',ds:'Gestão com IA T2 — Aula 3',h:'09:00 às 12:00',px:'A definir'},
+  // ── DEZEMBRO ──
+  {d:'2026-12-07',t:'CONEXÃO',ds:'Conexão — Início de Mês',h:'07:00 às 08:30',px:'Toda Equipe',sl:'Sala de Treinamento'},
+  {d:'2026-12-14',t:'HOT SEAT',ds:'Hot Seat — Encontro Mensal Donos',h:'09:00 às 12:00',px:'Gabriel e Cleire',sl:'Diretoria'},
+  {d:'2026-12-14',t:'GESTÃO COM IA',ds:'Gestão com IA T2 — Aula 4',h:'09:00 às 12:00',px:'A definir'},
+  {d:'2026-12-21',t:'TREINAMENTO',ds:'Treinamento de Vendas',h:'08:00 às 10:00',px:'Toda Equipe Comercial',sl:'Sala de Treinamento'},
+];
+
+const EP=[
+  {d:'2026-04-08',t:'APN NORMAL',ds:'APN 103',h:'3 dias (08–10/Abr)',lc:'São Paulo — SP',px:'A inscrever',vg:20},
+  {d:'2026-04-13',t:'CASAIS',ds:'Casais de Alta Performance (OPCIONAL)',h:'4 dias (13–16/Abr)',lc:'A confirmar',px:'Consultar com consultor'},
+  {d:'2026-05-06',t:'APN ESPECIAL',ds:'APN 104 — Goiânia',h:'3 dias (06–08/Mai)',lc:'Goiânia — GO',px:'Weslley e Vitor Martins'},
+  {d:'2026-05-12',t:'FORMAÇÃO PRESENCIAL',ds:'Gestão de Finanças — SP',h:'2 dias (12–13/Mai)',lc:'São Paulo — SP',px:'?Gabriel e Cleire',ob:'Confirmar inscrição'},
+  {d:'2026-05-20',t:'APN GESTORES',ds:'APN 105 para Gestores — SP',h:'3 dias (20–22/Mai)',lc:'São Paulo — SP',px:'A definir'},
+  {d:'2026-05-28',t:'ENCONTRO ELITE',ds:'Encontro Elite — Finanças',h:'2 dias (28–29/Mai)',lc:'São Paulo — SP',px:'A inscrever (2 vagas)',vg:2},
+  {d:'2026-06-03',t:'APN NORMAL',ds:'APN 106',h:'3 dias (03–05/Jun)',lc:'São Paulo — SP',px:'A inscrever',vg:20},
+  {d:'2026-07-15',t:'FORMAÇÃO PRESENCIAL',ds:'GAP Avançado — SP',h:'2 dias (15–16/Jul)',lc:'São Paulo — SP',px:'A definir'},
+  {d:'2026-07-29',t:'FORMAÇÃO PRESENCIAL',ds:'GAP — SP',h:'2 dias (29–30/Jul)',lc:'São Paulo — SP',px:'A definir'},
+  {d:'2026-08-04',t:'FORMAÇÃO PRESENCIAL',ds:'Gestão Comercial Avançado — SP',h:'2 dias (04–05/Ago)',lc:'São Paulo — SP',px:'A definir'},
+  {d:'2026-08-12',t:'APN ESPECIAL',ds:'APN 107 — Florianópolis',h:'3 dias (12–14/Ago)',lc:'Florianópolis — SC',px:'A inscrever (1 vaga)',vg:1},
+  {d:'2026-08-27',t:'ENCONTRO ELITE',ds:'Encontro Elite — Pessoas',h:'2 dias (27–28/Ago)',lc:'Fortaleza — CE',px:'A inscrever (2 vagas)',vg:2},
+  {d:'2026-09-01',t:'FORMAÇÃO PRESENCIAL',ds:'Gestão com IA — SP',h:'2 dias (01–02/Set)',lc:'São Paulo — SP',px:'Gabriel, Pedro e Gustavo'},
+  {d:'2026-09-09',t:'APN NORMAL',ds:'APN 109',h:'3 dias (09–11/Set)',lc:'São Paulo — SP',px:'A inscrever',vg:20},
+  {d:'2026-10-07',t:'APN ESPECIAL',ds:'APN 110 — Manaus',h:'3 dias (07–09/Out)',lc:'Manaus — AM',px:'A inscrever (1 vaga)',vg:1},
+  {d:'2026-11-04',t:'APN GESTORES',ds:'APN 111 para Gestores — SP',h:'3 dias (04–06/Nov)',lc:'São Paulo — SP',px:'A definir'},
+  {d:'2026-11-11',t:'APN NORMAL',ds:'APN 112',h:'3 dias (11–13/Nov)',lc:'São Paulo — SP',px:'A inscrever',vg:20},
+  {d:'2026-11-18',t:'FORMAÇÃO PRESENCIAL',ds:'Gestão de Finanças — SP',h:'2 dias (18–19/Nov)',lc:'São Paulo — SP',px:'A definir'},
+  {d:'2026-11-26',t:'ENCONTRO ELITE',ds:'Encontro Elite — Planejamento',h:'2 dias (26–27/Nov)',lc:'São Paulo — SP',px:'Gabriel e Cleire'},
+  {d:'2026-12-09',t:'APN NORMAL',ds:'APN 113',h:'3 dias (09–11/Dez)',lc:'São Paulo — SP',px:'A inscrever',vg:20},
+];
+
+// ════════════════════════════════════════════════════════
+// PESSOAS — agrupadas por CURSO com TODAS AS AULAS visíveis
+// Gabriel e Cleire: saíram do GAP T1, agora no GAP T2
+// Francieli: saiu do GAP T1, já estava no GAP T2
+// ════════════════════════════════════════════════════════
+const PESSOAS={
+  'Gabriel':{role:'CEO / Dono',nota:null,cursos:[
+    {nome:'Hot Seat',fmt:'O',aulas:[{d:'2026-04-14',n:'Abr'},{d:'2026-05-14',n:'Mai'},{d:'2026-06-08',n:'Jun'},{d:'2026-07-13',n:'Jul'},{d:'2026-08-10',n:'Ago'},{d:'2026-09-28',n:'Set'},{d:'2026-10-26',n:'Out'},{d:'2026-11-23',n:'Nov'},{d:'2026-12-14',n:'Dez'}]},
+    {nome:'Gestão de RH T1',fmt:'O',aulas:[{d:'2026-04-08',n:'Aula 1'},{d:'2026-04-15',n:'Aula 2'},{d:'2026-04-22',n:'Aula 3'},{d:'2026-04-29',n:'Aula 4'}]},
+    {nome:'Gestão Comercial T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão de Marketing T1',fmt:'O',aulas:[{d:'2026-05-05',n:'Aula 1'},{d:'2026-05-12',n:'Aula 2'},{d:'2026-05-19',n:'Aula 3'},{d:'2026-05-26',n:'Aula 4'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'Gestão de Finanças T2',fmt:'O',aulas:[{d:'2026-07-07',n:'Aula 1'},{d:'2026-07-14',n:'Aula 2'},{d:'2026-07-21',n:'Aula 3'},{d:'2026-07-28',n:'Aula 4'}]},
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+    {nome:'Gestão com IA — SP',fmt:'P',aulas:[{d:'2026-09-01',n:'Dias 1 e 2'}]},
+    {nome:'Encontro Elite Planejamento',fmt:'P',aulas:[{d:'2026-11-26',n:'Dias 1 e 2'}]},
+  ]},
+  'Cleire':{role:'Sócia / Dona',nota:null,cursos:[
+    {nome:'Hot Seat',fmt:'O',aulas:[{d:'2026-04-14',n:'Abr'},{d:'2026-05-14',n:'Mai'},{d:'2026-06-08',n:'Jun'},{d:'2026-07-13',n:'Jul'},{d:'2026-08-10',n:'Ago'},{d:'2026-09-28',n:'Set'},{d:'2026-10-26',n:'Out'},{d:'2026-11-23',n:'Nov'},{d:'2026-12-14',n:'Dez'}]},
+    {nome:'Gestão de RH T1',fmt:'O',aulas:[{d:'2026-04-08',n:'Aula 1'},{d:'2026-04-15',n:'Aula 2'},{d:'2026-04-22',n:'Aula 3'},{d:'2026-04-29',n:'Aula 4'}]},
+    {nome:'Gestão Comercial T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão de Marketing T1',fmt:'O',aulas:[{d:'2026-05-05',n:'Aula 1'},{d:'2026-05-12',n:'Aula 2'},{d:'2026-05-19',n:'Aula 3'},{d:'2026-05-26',n:'Aula 4'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'Gestão de Finanças T2',fmt:'O',aulas:[{d:'2026-07-07',n:'Aula 1'},{d:'2026-07-14',n:'Aula 2'},{d:'2026-07-21',n:'Aula 3'},{d:'2026-07-28',n:'Aula 4'}]},
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+    {nome:'Encontro Elite Planejamento',fmt:'P',aulas:[{d:'2026-11-26',n:'Dias 1 e 2'}]},
+  ]},
+  'Weslley':{role:'Gestor',nota:null,cursos:[
+    {nome:'Gestão de RH T1',fmt:'O',aulas:[{d:'2026-04-08',n:'Aula 1'},{d:'2026-04-15',n:'Aula 2'},{d:'2026-04-22',n:'Aula 3'},{d:'2026-04-29',n:'Aula 4'}]},
+    {nome:'GAP T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão de Marketing T1',fmt:'O',aulas:[{d:'2026-05-05',n:'Aula 1'},{d:'2026-05-12',n:'Aula 2'},{d:'2026-05-19',n:'Aula 3'},{d:'2026-05-26',n:'Aula 4'}]},
+    {nome:'APN 104 — Goiânia',fmt:'P',aulas:[{d:'2026-05-06',n:'Dias 1-3'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'Gestão de Finanças T2',fmt:'O',aulas:[{d:'2026-07-07',n:'Aula 1'},{d:'2026-07-14',n:'Aula 2'},{d:'2026-07-21',n:'Aula 3'},{d:'2026-07-28',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+    {nome:'Gestão Comercial T2',fmt:'O',aulas:[{d:'2026-11-03',n:'Aula 1'},{d:'2026-11-10',n:'Aula 2'},{d:'2026-11-17',n:'Aula 3'},{d:'2026-11-24',n:'Aula 4'}]},
+  ]},
+  'Rafael':{role:'Gestor',nota:null,cursos:[
+    {nome:'GAP T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Gustavo':{role:'Gestor',nota:null,cursos:[
+    {nome:'GAP T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'Gestão com IA — SP',fmt:'P',aulas:[{d:'2026-09-01',n:'Dias 1 e 2'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Pedro':{role:'Gestor',nota:null,cursos:[
+    {nome:'GAP T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'Gestão com IA — SP',fmt:'P',aulas:[{d:'2026-09-01',n:'Dias 1 e 2'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Vitor Martins':{role:'Gestor',nota:null,cursos:[
+    {nome:'GAP T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'APN 104 — Goiânia',fmt:'P',aulas:[{d:'2026-05-06',n:'Dias 1-3'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Josias':{role:'Gestor / Vendas',nota:null,cursos:[
+    {nome:'Gestão de RH T1',fmt:'O',aulas:[{d:'2026-04-08',n:'Aula 1'},{d:'2026-04-15',n:'Aula 2'},{d:'2026-04-22',n:'Aula 3'},{d:'2026-04-29',n:'Aula 4'}]},
+    {nome:'GAP T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão de Marketing T1',fmt:'O',aulas:[{d:'2026-05-05',n:'Aula 1'},{d:'2026-05-12',n:'Aula 2'},{d:'2026-05-19',n:'Aula 3'},{d:'2026-05-26',n:'Aula 4'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'Gestão de Finanças T2',fmt:'O',aulas:[{d:'2026-07-07',n:'Aula 1'},{d:'2026-07-14',n:'Aula 2'},{d:'2026-07-21',n:'Aula 3'},{d:'2026-07-28',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+    {nome:'Gestão Comercial T2',fmt:'O',aulas:[{d:'2026-11-03',n:'Aula 1'},{d:'2026-11-10',n:'Aula 2'},{d:'2026-11-17',n:'Aula 3'},{d:'2026-11-24',n:'Aula 4'}]},
+  ]},
+  'Laysla':{role:'Gestora',nota:null,cursos:[
+    {nome:'Gestão de RH T1',fmt:'O',aulas:[{d:'2026-04-08',n:'Aula 1'},{d:'2026-04-15',n:'Aula 2'},{d:'2026-04-22',n:'Aula 3'},{d:'2026-04-29',n:'Aula 4'}]},
+    {nome:'GAP T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Victor Hugo':{role:'Gestor Comercial',nota:null,cursos:[
+    {nome:'Gestão Comercial T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão de Marketing T1',fmt:'O',aulas:[{d:'2026-05-05',n:'Aula 1'},{d:'2026-05-12',n:'Aula 2'},{d:'2026-05-19',n:'Aula 3'},{d:'2026-05-26',n:'Aula 4'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Francieli':{role:'Gerente Comercial',nota:null,cursos:[
+    {nome:'Gestão Comercial T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'Gestão de Marketing T1',fmt:'O',aulas:[{d:'2026-05-05',n:'Aula 1'},{d:'2026-05-12',n:'Aula 2'},{d:'2026-05-19',n:'Aula 3'},{d:'2026-05-26',n:'Aula 4'}]},
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Patrick':{role:'Gestor',nota:null,cursos:[
+    {nome:'Gestão com IA T1',fmt:'O',aulas:[{d:'2026-06-02',n:'Aula 1'},{d:'2026-06-09',n:'Aula 2'},{d:'2026-06-16',n:'Aula 3'},{d:'2026-06-23',n:'Aula 4'}]},
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Vitoria':{role:'Vendas',nota:null,cursos:[
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Hugo':{role:'Gestor',nota:null,cursos:[
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Janderson':{role:'Gestor',nota:null,cursos:[
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Maria':{role:'Gestora',nota:null,cursos:[
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Erika':{role:'Vendas',nota:null,cursos:[
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Leonilda':{role:'Colaboradora',nota:null,cursos:[
+    {nome:'Gestão de Finanças T2',fmt:'O',aulas:[{d:'2026-07-07',n:'Aula 1'},{d:'2026-07-14',n:'Aula 2'},{d:'2026-07-21',n:'Aula 3'},{d:'2026-07-28',n:'Aula 4'}]},
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Andressa':{role:'Colaboradora',nota:null,cursos:[
+    {nome:'GAP T2',fmt:'O',aulas:[{d:'2026-07-21',n:'Aula 1'},{d:'2026-07-27',n:'Aula 2'},{d:'2026-08-04',n:'Aula 3'},{d:'2026-08-11',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+  'Claudia':{role:'Gestora',nota:'GAP Avançado: solicitar turma à Seja AP para 2027',cursos:[
+    {nome:'Gestão de Finanças T2',fmt:'O',aulas:[{d:'2026-07-07',n:'Aula 1'},{d:'2026-07-14',n:'Aula 2'},{d:'2026-07-21',n:'Aula 3'},{d:'2026-07-28',n:'Aula 4'}]},
+    {nome:'GAP T3',fmt:'O',aulas:[{d:'2026-10-06',n:'Aula 1'},{d:'2026-10-13',n:'Aula 2'},{d:'2026-10-20',n:'Aula 3'},{d:'2026-10-27',n:'Aula 4'}]},
+  ]},
+  'Rubens':{role:'Gestor',nota:null,cursos:[
+    {nome:'GAP T1',fmt:'O',aulas:[{d:'2026-04-13',n:'Aula 1'},{d:'2026-04-27',n:'Aula 2'},{d:'2026-05-11',n:'Aula 3'},{d:'2026-05-25',n:'Aula 4'}]},
+    {nome:'GAP Avançado T2',fmt:'O',aulas:[{d:'2026-09-08',n:'Aula 1'},{d:'2026-09-15',n:'Aula 2'},{d:'2026-09-22',n:'Aula 3'},{d:'2026-09-29',n:'Aula 4'}]},
+  ]},
+};
+
+// ── Utils ──
+function pD(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
+function fDay(s){return pD(s).getDate();}
+function fDow(s){return DW[pD(s).getDay()];}
+function fMon(s){const d=pD(s);return`${MN[d.getMonth()]} ${d.getFullYear()}`;}
+function fBR(s){const d=pD(s);return`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;}
+function pxN(p){if(!p||['Toda Equipe','A definir','A inscrever'].some(x=>p.includes(x)))return null;return p.split(',').length;}
+function cC(e){if(e.t?.includes('HOT SEAT'))return'hotseat';if(e.t?.includes('TREINAMENTO'))return'treinamento';if(e.t?.includes('CONEXÃO'))return'conexao';return'';}
+
+// ── Conflitos ──
+function getC(){
+  const bd={};
+  EO.forEach(e=>{if(!bd[e.d])bd[e.d]=[];bd[e.d].push(e);});
+  EP.forEach(e=>{if(!bd[e.d])bd[e.d]=[];bd[e.d].push({...e,fmt:'P'});});
+  const res=[];
+  Object.entries(bd).forEach(([d,evts])=>{
+    if(evts.length<2)return;
+    const seen=new Set(),ov=[];
+    evts.forEach(e=>{
+      if(!e.px||['Toda Equipe','A definir','A inscrever'].some(x=>e.px.includes(x)))return;
+      e.px.split(',').map(p=>p.trim().replace(/[?★⚠]/g,'')).forEach(p=>{if(p){if(seen.has(p))ov.push(p);seen.add(p);}});
+    });
+    res.push({d,evts,ov:[...new Set(ov)]});
+  });
+  return res.sort((a,b)=>a.d.localeCompare(b.d));
+}
+const CF=getC();
+
+// ── Render Online ──
+function ro(){
+  const q=(document.getElementById('so').value||'').toLowerCase();
+  const tf=(document.getElementById('ft').value||'').toLowerCase();
+  const fl=EO.filter(e=>{const tx=(e.t+e.ds+e.px).toLowerCase();return(!q||tx.includes(q))&&(!tf||e.t.toLowerCase().includes(tf));});
+  const bm={};fl.forEach(e=>{const k=fMon(e.d);if(!bm[k])bm[k]=[];bm[k].push(e);});
+  let h='';
+  if(!Object.keys(bm).length){h='<div class="empty">Nenhum evento encontrado.</div>';}
+  Object.keys(bm).forEach(k=>{
+    h+=`<div class="mblock"><div class="mlbl">${k}</div>`;
+    bm[k].sort((a,b)=>a.d.localeCompare(b.d)).forEach(e=>{
+      const isc=CF.some(c=>c.d===e.d&&c.ov.length>0);
+      const n=pxN(e.px);const ss=n&&n>=5;
+      const js=JSON.stringify(e).replace(/'/g,"&#39;");
+      h+=`<div class="ecard ${cC(e)}${isc?' conflito':''}" onclick='om(${js})'>
+        <div><div class="eday">${fDay(e.d)}</div><div class="edow">${fDow(e.d)}</div></div>
+        <div>
+          <div class="etitle">${e.ds}${e.mv?'<span class="tag tm2" style="margin-left:5px;font-size:0.5rem">MIGRADO</span>':''}</div>
+          <div class="esub">${e.t}</div>
+          <div class="etags">
+            <span class="tag to">Online</span>
+            ${ss?'<span class="tag ts">★ Fazer em sala</span>':''}
+            ${n?`<span class="tag tn">${n} pessoas</span>`:''}
+            ${isc?'<span class="tag tc">Conflito de data</span>':''}
+          </div>
+        </div>
+        <div><div class="ehour">${e.h}</div>${n?`<div class="epax">${n} part.</div>`:''}</div>
+      </div>`;
+    });
+    h+='</div>';
+  });
+  document.getElementById('oc').innerHTML=h;
+}
+
+// ── Render Presencial ──
+function rp(){
+  const q=(document.getElementById('sp').value||'').toLowerCase();
+  const fl=EP.filter(e=>{const tx=(e.t+e.ds+(e.lc||'')+(e.px||'')).toLowerCase();return!q||tx.includes(q);});
+  const bm={};fl.forEach(e=>{const k=fMon(e.d);if(!bm[k])bm[k]=[];bm[k].push(e);});
+  let h='';
+  if(!Object.keys(bm).length){h='<div class="empty">Nenhum evento encontrado.</div>';}
+  Object.keys(bm).forEach(k=>{
+    h+=`<div class="mblock"><div class="mlbl">${k}</div>`;
+    bm[k].sort((a,b)=>a.d.localeCompare(b.d)).forEach(e=>{
+      const js=JSON.stringify({...e,fmt:'P'}).replace(/'/g,"&#39;");
+      h+=`<div class="ecard presencial" onclick='om(${js})'>
+        <div><div class="eday">${fDay(e.d)}</div><div class="edow">${fDow(e.d)}</div></div>
+        <div>
+          <div class="etitle">${e.ds}</div>
+          <div class="esub">${e.t}</div>
+          <div class="etags">
+            <span class="tag tp">Presencial</span>
+            ${e.lc?`<span class="tag tn">${e.lc}</span>`:''}
+            ${e.vg?`<span class="tag ts">${e.vg} vaga${e.vg>1?'s':''}</span>`:''}
+          </div>
+        </div>
+        <div><div class="ehour" style="font-size:0.6rem;max-width:86px;text-align:right;line-height:1.4">${e.h}</div></div>
+      </div>`;
+    });
+    h+='</div>';
+  });
+  document.getElementById('pc').innerHTML=h;
+}
+
+// ── Render Conflitos ──
+function rc(){
+  document.getElementById('ctag').textContent=CF.length;
+  if(!CF.length){document.getElementById('cc').innerHTML='<div class="empty">Nenhum conflito detectado.</div>';return;}
+  let h=`<div class="csummary"><strong>⚠ ${CF.length} datas com múltiplos eventos simultâneos.</strong><br>Verifique quais pessoas participam de mais de um evento no mesmo dia.</div>`;
+  CF.forEach(c=>{
+    h+=`<div class="ccard">
+      <div class="cdate">${fBR(c.d)} — ${fDow(c.d)}</div>
+      ${c.evts.map(e=>`<div class="citem">${e.ds} <span style="color:var(--tl);font-size:0.63rem;margin-left:4px">${e.h||''}</span></div>`).join('')}
+      ${c.ov.length?`<div class="coverlap">Pessoas em ambos: <strong>${c.ov.join(', ')}</strong></div>`:'<div class="coverlap" style="color:var(--tm)">Sem sobreposição de pessoas</div>'}
+    </div>`;
+  });
+  document.getElementById('cc').innerHTML=h;
+}
+
+// ── Render Pessoas — agrupado por curso com todas as aulas ──
+function rpe(){
+  const q=(document.getElementById('spe').value||'').toLowerCase();
+  const ns=Object.keys(PESSOAS).filter(n=>n.toLowerCase().includes(q)).sort();
+  const total=Object.keys(PESSOAS).length;
+  const totalCursos=Object.values(PESSOAS).reduce((acc,p)=>acc+p.cursos.length,0);
+  document.getElementById('sr').innerHTML=`
+    <div class="sbox"><div class="snum">${total}</div><div class="slbl">Pessoas</div></div>
+    <div class="sbox"><div class="snum">${EO.length}</div><div class="slbl">Ev. Online</div></div>
+    <div class="sbox"><div class="snum">${EP.length}</div><div class="slbl">Presenciais</div></div>
+    <div class="sbox" style="border-color:rgba(224,82,82,.22)"><div class="snum" style="color:var(--r)">${CF.length}</div><div class="slbl">Conflitos</div></div>
+  `;
+  let h='';
+  ns.forEach(n=>{
+    const p=PESSOAS[n];if(!p)return;
+    const ini=n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const totalAulas=p.cursos.reduce((acc,c)=>acc+c.aulas.length,0);
+    const presN=p.cursos.filter(c=>c.fmt==='P').length;
+    h+=`<div class="pcard">
+      <div class="phead">
+        <div class="pav">${ini}</div>
+        <div><div class="pname">${n}</div><div class="prole">${p.role}</div></div>
+      </div>
+      <div class="pcursos">`;
+    p.cursos.forEach(c=>{
+      h+=`<div class="curso-grupo">
+        <div class="curso-header">
+          <span class="curso-nome">${c.nome}</span>
+          <span class="curso-badge ${c.fmt==='P'?'cb-p':'cb-o'}">${c.fmt==='P'?'Presencial':'Online'}</span>
+        </div>`;
+      c.aulas.forEach(a=>{
+        h+=`<div class="aula-row">
+          <span class="aula-data">${fBR(a.d)}</span>
+          <span class="aula-nome ${c.fmt==='P'?'aula-p':''}">${a.n} — ${fDow(a.d)}</span>
+        </div>`;
+      });
+      h+='</div>';
+    });
+    h+=`</div>
+      <div class="pcnt">${p.cursos.length} curso${p.cursos.length>1?'s':''} · ${totalAulas} aula${totalAulas>1?'s':''}${presN?` · ${presN} presencial${presN>1?'is':''}`:''}</div>
+      ${p.nota?`<div class="pnota">⚠ ${p.nota}</div>`:''}
+    </div>`;
+  });
+  document.getElementById('pec').innerHTML=h||'<div class="empty">Nenhuma pessoa encontrada.</div>';
+}
+
+// ── Modal ──
+function om(ev){
+  if(typeof ev==='string')ev=JSON.parse(ev);
+  document.getElementById('mt').textContent=ev.ds||ev.desc;
+  document.getElementById('mtp').textContent=`${ev.t||ev.tipo} — ${ev.fmt==='P'?'PRESENCIAL':'ONLINE'}`;
+  const rows=[
+    ['Data',fBR(ev.d)+' ('+fDow(ev.d)+')','yl'],
+    ['Horário',ev.h||ev.hora||'—','yl'],
+    ['Formato',ev.fmt==='P'?'100% Presencial':'100% Online',''],
+  ];
+  if(ev.lc||ev.local)rows.push(['Local',ev.lc||ev.local,'']);
+  if(ev.sl||ev.sala)rows.push(['Sala sugerida',ev.sl||ev.sala,'']);
+  rows.push(['Participantes',ev.px||ev.pax||'—','']);
+  if(ev.vg||ev.vagas)rows.push(['Vagas',`${ev.vg||ev.vagas} vaga${(ev.vg||ev.vagas)>1?'s':''}` ,'']);
+  if(ev.ob||ev.obs)rows.push(['Observação',ev.ob||ev.obs,'or']);
+  if(ev.nt||ev.nota)rows.push(['Atenção',ev.nt||ev.nota,'or']);
+  if(ev.mv||ev.movido)rows.push(['Nota','Participantes migrados da turma anterior (março/26)','or']);
+  document.getElementById('mb').innerHTML=rows.map(([l,v,c])=>`<div class="mrow"><span class="ml">${l}</span><span class="mv ${c}">${v}</span></div>`).join('');
+  const noI=['HOT SEAT','TREINAMENTO','CONEXÃO'].some(x=>(ev.t||ev.tipo||'').includes(x));
+  document.getElementById('mi').innerHTML=noI
+    ?`<div style="font-size:0.66rem;color:var(--tl);padding:2px 0">Este evento não requer inscrição externa.</div>`
+    :`<div class="mit">Como fazer a inscrição</div>
+      <div class="mir">Empresa: <strong>${EMP}</strong></div>
+      <div class="mir">Responsável: <strong>Gabriel</strong></div>
+      <div class="mir" style="margin-top:3px;font-size:0.63rem;color:var(--tl)">Acesse o calendário, localize o evento e clique em INSCREVA-SE</div>
+      <a href="${LINK}" target="_blank">▶ ABRIR CALENDÁRIO SEJA AP</a>`;
+  document.getElementById('ov').classList.add('open');
+}
+function cm(){document.getElementById('ov').classList.remove('open');}
+function mc(e){if(e.target.id==='ov')cm();}
+
+function st(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelector(`[onclick="st('${id}')"]`).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+document.getElementById('today').textContent=new Date().toLocaleDateString('pt-BR');
+ro();rp();rc();rpe();
+
+// ════════════════════════════════════════════════════════
+// ELITEENS — Encontros Online 2026 (a partir de 02/04)
+// Das 19h às 20h30 — 100% Online
+// ════════════════════════════════════════════════════════
+const ELITEENS=[
+  {d:'2026-04-07',mes:'Abril'},
+  {d:'2026-04-22',mes:'Abril'},
+  {d:'2026-05-05',mes:'Maio'},
+  {d:'2026-06-09',mes:'Junho'},
+  {d:'2026-06-23',mes:'Junho'},
+  {d:'2026-08-04',mes:'Agosto'},
+  {d:'2026-09-01',mes:'Setembro'},
+  {d:'2026-09-15',mes:'Setembro'},
+  {d:'2026-10-06',mes:'Outubro'},
+  {d:'2026-10-20',mes:'Outubro'},
+  {d:'2026-11-03',mes:'Novembro'},
+  {d:'2026-12-01',mes:'Dezembro'},
+];
+
+function rel(){
+  const bm={};
+  ELITEENS.forEach(e=>{
+    const k=e.mes;
+    if(!bm[k])bm[k]=[];
+    bm[k].push(e);
+  });
+  let h='';
+  let idx=1;
+  Object.keys(bm).forEach(k=>{
+    h+=`<div class="mblock"><div class="mlbl" style="color:#a78bfa;border-color:rgba(167,139,250,.16)">${k}</div>`;
+    bm[k].forEach(e=>{
+      h+=`<div style="background:var(--gd);border:1px solid rgba(167,139,250,.12);border-left:4px solid #a78bfa;border-radius:5px;padding:10px 14px;margin-bottom:6px;display:grid;grid-template-columns:48px 1fr auto;gap:11px;align-items:center;">
+        <div>
+          <div style="font-size:1.3rem;font-weight:800;color:#a78bfa;line-height:1;text-align:center;">${fDay(e.d)}</div>
+          <div style="font-size:0.57rem;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:1px;text-align:center;">${fDow(e.d)}</div>
+        </div>
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:var(--w);margin-bottom:2px;">Encontro Online #${idx} — Eliteens</div>
+          <div style="font-size:0.66rem;color:var(--tl);margin-bottom:4px;">Desenvolvimento de Alta Performance para Jovens</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            <span class="tag" style="background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2);">Online</span>
+            <span class="tag ts">Fazer na empresa</span>
+            <span class="tag" style="background:rgba(255,255,255,.05);color:var(--w);border:1px solid rgba(255,255,255,.1);">Filhos dos colaboradores</span>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:0.66rem;font-weight:700;color:#a78bfa;white-space:nowrap;">19:00 às 20:30</div>
+          <div style="font-size:0.59rem;color:var(--tl);margin-top:2px;">${fBR(e.d)}</div>
+        </div>
+      </div>`;
+      idx++;
+    });
+    h+='</div>';
+  });
+  document.getElementById('eliteens-content').innerHTML=h;
+}
+rel();
+</script>
+</body>
+</html>
